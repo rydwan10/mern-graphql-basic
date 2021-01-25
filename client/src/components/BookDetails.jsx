@@ -30,7 +30,7 @@ const BookDetails = (props) => {
               Delete Book
             </button>
           </div>
-          <p>{book.genre}</p>
+          <p>Genre: {book.genre}</p>
           <h4>By: {book.author.name}</h4>
           <p>All books by this author: </p>
           <ul className="other-books">
