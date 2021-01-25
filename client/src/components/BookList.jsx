@@ -31,7 +31,7 @@ const BookList = (props) => {
       <ul className="bookList" id="book-list">
         {displayBooks()}
       </ul>
-      <BookDetails bookId={selectedId} />
+      <BookDetails bookId={selectedId} setSelectedId={setSelectedId} />
     </div>
   );
 };

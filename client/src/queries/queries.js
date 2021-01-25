@@ -46,3 +46,12 @@ export const getBookQuery = gql`
     }
   }
 `;
+
+export const deleteBookQuery = gql`
+  mutation($bookId: ID!) {
+    deleteBook(bookId: $bookId) {
+      id
+      name
+    }
+  }
+`;

@@ -1,13 +1,35 @@
 import { graphql } from "react-apollo";
-import { getBookQuery } from "../queries/queries";
+import { flowRight as compose } from "lodash";
+import {
+  getBookQuery,
+  deleteBookQuery,
+  getBooksQuery,
+} from "../queries/queries";
 
 const BookDetails = (props) => {
+  const handleDelete = (id) => {
+    if (window.confirm("Delete this book?")) {
+      props.deleteBookQuery({
+        variables: {
+          id: id,
+        },
+        refetchQueries: [{ query: getBooksQuery }],
+      });
+      props.setSelectedId(null);
+    }
+  };
+
   const displayBookDetail = () => {
     const { book } = props.data;
     if (book) {
       return (
         <div>
-          <h2>{book.name}</h2>
+          <div id="delete-wrapper">
+            <h2>{book.name}</h2>
+            <button onClick={() => handleDelete(book.id)} id="delete-button">
+              Delete Book
+            </button>
+          </div>
           <p>{book.genre}</p>
           <h4>By: {book.author.name}</h4>
           <p>All books by this author: </p>
@@ -30,12 +52,16 @@ const BookDetails = (props) => {
   );
 };
 
-export default graphql(getBookQuery, {
-  options: (props) => {
-    return {
-      variables: {
-        id: props.bookId,
-      },
-    };
-  },
-})(BookDetails);
+export default compose(
+  graphql(getBookQuery, {
+    options: (props) => {
+      return {
+        variables: {
+          id: props.bookId,
+        },
+      };
+    },
+  }),
+
+  graphql(deleteBookQuery, { name: "deleteBookQuery" })
+)(BookDetails);
